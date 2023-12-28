@@ -182,7 +182,7 @@ You:
 ```ssh -i <file_path> <user>@<port>```
 """
 
-summary_prompt = f"""**Prompt for Prioritized Text Summarization with Emphasis on Time-Sensitive Requests to Anwar:**
+ts_summary_prompt = f"""**Prompt for Prioritized Text Summarization with Emphasis on Time-Sensitive or delayed tickets to Anwar that need the most attention:**
 
 - **Today's Date:** {datetime.now().strftime("%m/%d/%Y")}
 

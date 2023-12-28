@@ -106,7 +106,7 @@ def summary(query, model):
     console_helper.console.log("Model: ", openai_helper.config.model)
 
     messages = [
-        {'role': 'system', 'content': prompt_helper.summary_prompt},
+        {'role': 'system', 'content': prompt_helper.ts_summary_prompt},
     ]
     if not query:
         # get from clipboard
