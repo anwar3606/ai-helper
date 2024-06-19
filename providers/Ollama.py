@@ -31,7 +31,7 @@ class OllamaChatProvider(ChatProvider):
         self.response_token = 0
         self.generation_start_time = time.time()
 
-        return self.client.chat(model=self.config.model, messages=messages, stream=True, options=kwargs)
+        return self.client.chat(model=self.config.model, messages=messages, stream=True, options={'num_ctx':4096})
 
     def print_messages(self, response):
         with Live(refresh_per_second=6) as live:
