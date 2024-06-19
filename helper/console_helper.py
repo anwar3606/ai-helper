@@ -47,6 +47,18 @@ def get_multiline_input(prompt=""):
     return "\n".join(lines)
 
 
+def get_stdin_input():
+    import select
+
+    if select.select([sys.stdin, ], [], [], 0.0)[0]:
+        text = ''.join(sys.stdin.readlines())
+    else:
+        text = None
+
+    sys.stdin = open('/dev/tty')
+    return text
+
+
 def chat_in_console(model, messages, query, **kwargs):
     chat_provider = get_chat_provider(Config.global_config.provider)
     if model:
@@ -54,14 +66,26 @@ def chat_in_console(model, messages, query, **kwargs):
     log.info(f"Provider: {chat_provider.provider}, Model: {chat_provider.get_model()}")
 
     while True:
-        if query:
+        input_text = None
+        if isinstance(query, tuple):
+            query = query[0] if query else None
+
+        log.debug(f"Query: {query}")
+        if query == '-':
+            try:
+                input_text = get_stdin_input()
+            except OSError:
+                pass
+        elif query:
             input_text = " ".join(query)
-            query = None
-        else:
+        query = None
+
+        if not input_text:
             input_text = get_multiline_input('You')
             if not input_text:
                 return chat_provider.response_text
 
+        log.debug(f"Input: {input_text}")
         chat_provider.response_text = ""
 
         messages.append({'role': 'user', 'content': input_text})
