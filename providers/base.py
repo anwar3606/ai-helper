@@ -115,4 +115,7 @@ class ChatProvider(ABC):
 
     @staticmethod
     def calculate_input_token(messages):
-        return sum(len(message['content'].split()) for message in messages)
+        import tiktoken
+        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+
+        return sum(len(encoding.encode(message['content'])) for message in messages)
